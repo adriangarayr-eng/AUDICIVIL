@@ -19,7 +19,6 @@
       min-height: 100vh;
     }
 
-    /* Cabecera estilo cine */
     .header {
       background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
       border-bottom: 3px solid #c8102e;
@@ -62,14 +61,12 @@
       color: #fff;
     }
 
-    /* Contenedor principal */
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 2rem 1.5rem;
     }
 
-    /* Sección de administración (oculta por defecto) */
     .admin-panel {
       background: #1c1c1c;
       border: 1px solid #333;
@@ -154,7 +151,6 @@
       border-radius: 20px;
     }
 
-    /* Título de sección de eventos */
     .section-title {
       font-family: 'Bebas Neue', cursive;
       font-size: 2.5rem;
@@ -165,7 +161,6 @@
       letter-spacing: 3px;
     }
 
-    /* Grid de tarjetas */
     .events-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -272,6 +267,45 @@
       padding: 4rem 0;
     }
 
+    /* Estilos para lista de administración */
+    .admin-event-list {
+      margin-top: 2rem;
+      border-top: 1px solid #333;
+      padding-top: 1.5rem;
+    }
+
+    .admin-event-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #262626;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+    }
+
+    .admin-event-item span {
+      color: #ddd;
+      font-size: 0.95rem;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid #c8102e;
+      color: #c8102e;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-delete:hover {
+      background: #c8102e;
+      color: #fff;
+    }
+
     @media (max-width: 600px) {
       .logo h1 {
         font-size: 2.5rem;
@@ -322,9 +356,15 @@
         <button type="submit" class="btn-submit">Guardar evento</button>
         <button type="button" class="logout-btn" id="logoutAdmin">Cerrar panel</button>
       </form>
+
+      <!-- Lista de eventos para administrar -->
+      <div class="admin-event-list" id="adminEventList">
+        <h3 style="font-family: 'Bebas Neue', sans-serif; color: #c8102e; letter-spacing: 1px;">Eventos existentes</h3>
+        <div id="adminEventsContainer">Cargando...</div>
+      </div>
     </div>
 
-    <!-- Lista de eventos -->
+    <!-- Lista de eventos públicos -->
     <h2 class="section-title">📅 Eventos programados</h2>
     <div class="events-grid" id="eventsContainer">
       <p class="no-events">Cargando eventos...</p>
@@ -340,13 +380,13 @@
     const logoutBtn = document.getElementById('logoutAdmin');
     const eventForm = document.getElementById('eventForm');
     const eventsContainer = document.getElementById('eventsContainer');
+    const adminEventsContainer = document.getElementById('adminEventsContainer');
 
     let isAdmin = false;
 
     // Mostrar/ocultar panel de administración
     adminToggle.addEventListener('click', () => {
       if (isAdmin) {
-        // Si ya está logueado, cerrar sesión
         isAdmin = false;
         adminPanel.classList.remove('active');
         adminToggle.textContent = '🔐 Administrar';
@@ -356,6 +396,7 @@
           isAdmin = true;
           adminPanel.classList.add('active');
           adminToggle.textContent = '🔓 Cerrar sesión';
+          loadAdminEvents(); // Cargar lista de eventos en el panel
         } else if (password !== null) {
           alert('Contraseña incorrecta');
         }
@@ -368,13 +409,12 @@
       adminToggle.textContent = '🔐 Administrar';
     });
 
-    // Función para cargar y mostrar eventos
+    // Función para cargar eventos públicos (vista principal)
     async function loadEvents() {
       try {
         const response = await fetch('/api/events');
         const events = await response.json();
 
-        // Filtrar eventos de hoy y futuros
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const filtered = events.filter(ev => {
@@ -382,9 +422,7 @@
           return evDate >= today;
         });
 
-        // Ordenar por fecha ascendente
         filtered.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-
         renderEvents(filtered);
       } catch (error) {
         console.error('Error cargando eventos:', error);
@@ -431,12 +469,65 @@
       return new Date(dateStr + 'T00:00:00').toLocaleDateString('es-PE', options);
     }
 
+    // Cargar lista de eventos en el panel admin
+    async function loadAdminEvents() {
+      try {
+        const response = await fetch('/api/events');
+        const events = await response.json();
+        renderAdminEvents(events);
+      } catch (error) {
+        adminEventsContainer.innerHTML = '<p style="color:#c8102e;">Error al cargar eventos.</p>';
+      }
+    }
+
+    function renderAdminEvents(events) {
+      if (events.length === 0) {
+        adminEventsContainer.innerHTML = '<p style="color:#888;">No hay eventos creados aún.</p>';
+        return;
+      }
+
+      let html = '';
+      events.forEach(ev => {
+        html += `
+          <div class="admin-event-item">
+            <span>${ev.titulo} - ${ev.fecha} (${ev.horario})</span>
+            <button class="btn-delete" onclick="deleteEvent('${ev.id}')">🗑️ Eliminar</button>
+          </div>
+        `;
+      });
+      adminEventsContainer.innerHTML = html;
+    }
+
+    // Función para eliminar un evento desde el panel admin
+    async function deleteEvent(id) {
+      if (!confirm('¿Estás seguro de que deseas eliminar este evento? Esta acción no se puede deshacer.')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/events/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al eliminar');
+        }
+
+        alert('Evento eliminado correctamente');
+        loadAdminEvents();  // Refrescar lista del panel admin
+        loadEvents();       // Refrescar vista pública
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
     // Enviar formulario para crear evento
     eventForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const formData = new FormData(eventForm);
-      // Validaciones básicas
       if (!formData.get('titulo') || !formData.get('fecha') || !formData.get('horario')) {
         alert('Por favor complete los campos obligatorios: título, fecha y horario.');
         return;
@@ -455,7 +546,8 @@
 
         alert('Evento creado exitosamente');
         eventForm.reset();
-        loadEvents(); // Recargar lista
+        loadAdminEvents();  // Refrescar lista del panel admin
+        loadEvents();       // Refrescar vista pública
       } catch (error) {
         console.error('Error:', error);
         alert('Error: ' + error.message);
