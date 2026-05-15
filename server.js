@@ -85,6 +85,38 @@ app.post('/api/events', upload.single('imagen'), (req, res) => {
   }
 });
 
+// Ruta para eliminar un evento por ID
+app.delete('/api/events/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    let events = readEvents();
+    const eventIndex = events.findIndex(ev => ev.id === id);
+
+    if (eventIndex === -1) {
+      return res.status(404).json({ error: 'Evento no encontrado' });
+    }
+
+    const deletedEvent = events[eventIndex];
+
+    // Si el evento tiene imagen asociada, intentar borrar el archivo
+    if (deletedEvent.imagen) {
+      const imagePath = path.join(__dirname, 'public', deletedEvent.imagen);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    // Eliminar el evento de la lista
+    events.splice(eventIndex, 1);
+    saveEvents(events);
+
+    res.json({ mensaje: 'Evento eliminado correctamente', evento: deletedEvent });
+  } catch (err) {
+    console.error('Error al eliminar evento:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor AUDICIVIL escuchando en puerto ${PORT}`);
 });
