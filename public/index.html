@@ -4,8 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AUDICIVIL | Auditorio Ricardo Ramiro Santos Rodríguez</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Fonts e íconos -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --granate: #800000;
+      --granate-oscuro: #5a0000;
+      --granate-claro: #a52a2a;
+      --blanco: #ffffff;
+      --gris-claro: #f5f5f5;
+      --gris-medio: #e0e0e0;
+      --gris-oscuro: #333333;
+      --sombra: 0 4px 12px rgba(0,0,0,0.08);
+      --sombra-hover: 0 8px 24px rgba(128,0,0,0.15);
+      --borde-redondo: 16px;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -13,368 +28,417 @@
     }
 
     body {
-      background-color: #0a0a0a;
-      color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      min-height: 100vh;
+      background-color: var(--gris-claro);
+      color: var(--gris-oscuro);
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
     }
 
+    /* Cabecera */
     .header {
-      background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-      border-bottom: 3px solid #c8102e;
-      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, var(--granate) 0%, var(--granate-oscuro) 100%);
+      color: white;
+      padding: 1rem 2rem;
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
-    .logo h1 {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 3.5rem;
-      color: #c8102e;
-      letter-spacing: 5px;
-      line-height: 1;
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
     }
 
-    .logo p {
+    .logo-unmsm, .logo-fic {
+      height: 50px;
+      width: auto;
+      transition: transform 0.3s;
+    }
+    .logo-unmsm:hover, .logo-fic:hover {
+      transform: scale(1.05);
+    }
+
+    .header-titles {
+      display: flex;
+      flex-direction: column;
+    }
+    .header-titles h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .header-titles p {
       font-size: 0.9rem;
-      color: #ccc;
-      margin-top: 0.2rem;
+      opacity: 0.9;
     }
 
     .admin-btn {
       background: transparent;
-      border: 2px solid #c8102e;
-      color: #c8102e;
-      padding: 0.5rem 1.5rem;
-      font-family: 'Bebas Neue', cursive;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
+      border: 2px solid white;
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-
     .admin-btn:hover {
-      background: #c8102e;
-      color: #fff;
+      background: white;
+      color: var(--granate);
     }
 
+    /* Contenedor principal */
     .container {
-      max-width: 1300px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 2rem 1.5rem;
     }
 
+    /* Panel de administración */
     .admin-panel {
-      background: #1c1c1c;
-      border: 1px solid #333;
-      border-radius: 12px;
+      background: white;
+      border-radius: var(--borde-redondo);
       padding: 2rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--sombra);
       display: none;
     }
-
     .admin-panel.active {
       display: block;
     }
-
     .admin-panel h2 {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 2.2rem;
-      color: #c8102e;
-      letter-spacing: 2px;
+      color: var(--granate);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
       margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
     .form-group {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
     }
-
+    .form-group.full-width {
+      grid-column: span 2;
+    }
     label {
       display: block;
       font-weight: 600;
       margin-bottom: 0.3rem;
-      color: #aaa;
+      color: var(--gris-oscuro);
       font-size: 0.9rem;
     }
-
     input, textarea {
       width: 100%;
-      padding: 0.8rem;
-      background: #262626;
-      border: 1px solid #444;
-      border-radius: 6px;
-      color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1rem;
+      padding: 0.8rem 1rem;
+      border: 2px solid var(--gris-medio);
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+      background: white;
     }
-
-    input[type="file"] {
-      padding: 0.5rem;
+    input:focus, textarea:focus {
+      border-color: var(--granate);
+      outline: none;
     }
-
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
     .btn-submit {
-      background: #c8102e;
-      color: #fff;
+      background: var(--granate);
+      color: white;
       border: none;
-      padding: 0.8rem 2.5rem;
-      font-family: 'Bebas Neue', cursive;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
+      padding: 0.8rem 2rem;
       border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
       cursor: pointer;
-      transition: background 0.3s ease;
-      margin-top: 0.8rem;
+      transition: background 0.3s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      grid-column: span 2;
+      justify-self: start;
     }
-
     .btn-submit:hover {
-      background: #e0123a;
+      background: var(--granate-oscuro);
+      transform: translateY(-2px);
     }
-
     .logout-btn {
       background: transparent;
-      border: 2px solid #c8102e;
-      color: #c8102e;
-      padding: 0.4rem 1.2rem;
-      font-family: 'Bebas Neue', cursive;
-      font-size: 1rem;
-      letter-spacing: 1px;
+      border: 2px solid var(--granate);
+      color: var(--granate);
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
       cursor: pointer;
-      margin-left: 1rem;
+      transition: all 0.3s;
+    }
+    .logout-btn:hover {
+      background: var(--granate);
+      color: white;
+    }
+
+    /* Lista de eventos en admin */
+    .admin-event-list {
+      margin-top: 2rem;
+      border-top: 2px solid var(--gris-medio);
+      padding-top: 1.5rem;
+    }
+    .admin-event-list h3 {
+      color: var(--granate);
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 1rem;
+    }
+    .admin-event-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--gris-claro);
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      margin-bottom: 0.7rem;
+      transition: background 0.3s;
+    }
+    .admin-event-item:hover {
+      background: var(--gris-medio);
+    }
+    .admin-event-item span {
+      font-weight: 500;
+      color: var(--gris-oscuro);
+    }
+    .btn-delete {
+      background: transparent;
+      border: 1px solid #c0392b;
+      color: #c0392b;
+      padding: 0.3rem 1rem;
       border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-delete:hover {
+      background: #c0392b;
+      color: white;
     }
 
+    /* Sección de eventos públicos */
     .section-title {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 2.5rem;
-      color: #fff;
-      border-left: 6px solid #c8102e;
-      padding-left: 1rem;
-      margin-bottom: 2rem;
-      letter-spacing: 3px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--granate);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-
     .events-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 2rem;
     }
 
     .event-card {
-      background: #1a1a1a;
-      border-radius: 16px;
+      background: white;
+      border-radius: var(--borde-redondo);
       overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid #2a2a2a;
+      box-shadow: var(--sombra);
+      transition: transform 0.3s, box-shadow 0.3s;
       display: flex;
       flex-direction: column;
     }
-
     .event-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 24px rgba(200, 16, 46, 0.2);
+      transform: translateY(-6px);
+      box-shadow: var(--sombra-hover);
     }
-
     .event-image {
       width: 100%;
-      height: 220px;
+      height: 200px;
       object-fit: cover;
-      background: #262626;
+      background: var(--gris-medio);
     }
-
     .event-image-placeholder {
       width: 100%;
-      height: 220px;
-      background: #2a2a2a;
+      height: 200px;
+      background: var(--gris-medio);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #555;
-      font-size: 2rem;
+      color: #999;
+      font-size: 2.5rem;
     }
-
     .event-info {
       padding: 1.5rem;
       flex: 1;
       display: flex;
       flex-direction: column;
     }
-
     .event-title {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 2rem;
-      color: #fff;
-      letter-spacing: 1px;
-      line-height: 1.1;
-      margin-bottom: 0.5rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gris-oscuro);
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
     }
-
     .event-meta {
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 1rem;
       margin-bottom: 0.8rem;
-      color: #ccc;
-      font-size: 0.9rem;
-    }
-
-    .event-date, .event-time {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .event-extra {
-      color: #aaa;
-      font-size: 0.9rem;
-      line-height: 1.5;
-      margin-top: auto;
-    }
-
-    .event-status {
-      display: inline-block;
-      padding: 0.2rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-top: 0.8rem;
-      align-self: flex-start;
-    }
-
-    .status-today {
-      background: #c8102e;
-      color: #fff;
-    }
-
-    .status-future {
-      background: #2a5a2a;
-      color: #cfc;
-    }
-
-    .no-events {
-      text-align: center;
-      font-size: 1.5rem;
       color: #666;
-      grid-column: 1 / -1;
-      padding: 4rem 0;
+      font-size: 0.9rem;
     }
-
-    /* Estilos para lista de administración */
-    .admin-event-list {
-      margin-top: 2rem;
-      border-top: 1px solid #333;
-      padding-top: 1.5rem;
+    .event-meta i {
+      color: var(--granate);
+      width: 20px;
+      text-align: center;
     }
-
-    .admin-event-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #262626;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      margin-bottom: 0.8rem;
-    }
-
-    .admin-event-item span {
-      color: #ddd;
+    .event-extra {
+      color: #555;
       font-size: 0.95rem;
+      margin-bottom: 1rem;
+      flex: 1;
     }
-
-    .btn-delete {
-      background: transparent;
-      border: 1px solid #c8102e;
-      color: #c8102e;
-      padding: 0.3rem 0.8rem;
+    .event-status {
+      align-self: flex-start;
+      padding: 0.3rem 1rem;
       border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .status-today {
+      background: var(--granate);
+      color: white;
+    }
+    .status-future {
+      background: #27ae60;
+      color: white;
+    }
+    .no-events {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #999;
+      padding: 3rem;
+      background: white;
+      border-radius: var(--borde-redondo);
     }
 
-    .btn-delete:hover {
-      background: #c8102e;
-      color: #fff;
-    }
-
-    @media (max-width: 600px) {
-      .logo h1 {
-        font-size: 2.5rem;
-      }
+    @media (max-width: 768px) {
       .header {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
+      }
+      .header-left {
+        flex-direction: column;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full-width {
+        grid-column: span 1;
+      }
+      .btn-submit {
+        grid-column: span 1;
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
   <header class="header">
-    <div class="logo">
-      <h1>AUDICIVIL</h1>
-      <p>Auditorio Ricardo Ramiro Santos Rodríguez</p>
-      <p>Escuela Profesional de Ingeniería Civil - UNMSM</p>
+    <div class="header-left">
+      <!-- Logo UNMSM (cambia la URL si es necesario) -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Logo_UNMSM.svg/1200px-Logo_UNMSM.svg.png" 
+           alt="UNMSM" class="logo-unmsm"
+           onerror="this.style.display='none'">
+      <div class="header-titles">
+        <h1>AUDICIVIL</h1>
+        <p>Auditorio Ricardo Ramiro Santos Rodríguez</p>
+        <p style="font-size:0.8rem;">Escuela Profesional de Ingeniería Civil - UNMSM</p>
+      </div>
     </div>
-    <button class="admin-btn" id="adminToggle">🔐 Administrar</button>
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <!-- Logo FIC (ajusta la URL si es necesario) -->
+      <img src="https://civil.unmsm.edu.pe/wp-content/uploads/2021/03/logo-fic.png" 
+           alt="FIC" class="logo-fic"
+           onerror="this.style.display='none'">
+      <button class="admin-btn" id="adminToggle">
+        <i class="fas fa-lock"></i> Administrar
+      </button>
+    </div>
   </header>
 
   <div class="container">
-    <!-- Panel de administración (se muestra con contraseña) -->
+    <!-- Panel de administración -->
     <div class="admin-panel" id="adminPanel">
-      <h2>Agregar nuevo evento</h2>
+      <h2><i class="fas fa-plus-circle"></i> Agregar nuevo evento</h2>
       <form id="eventForm" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="titulo">Título del evento</label>
-          <input type="text" id="titulo" name="titulo" required>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="titulo">Título del evento</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Ej. Conferencia magistral..." required>
+          </div>
+          <div class="form-group">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha" required>
+          </div>
+          <div class="form-group">
+            <label for="horario">Horario</label>
+            <input type="text" id="horario" name="horario" placeholder="10:00 - 12:00" required>
+          </div>
+          <div class="form-group full-width">
+            <label for="info">Información extra</label>
+            <textarea id="info" name="info" rows="3" placeholder="Descripción, expositor, etc."></textarea>
+          </div>
+          <div class="form-group full-width">
+            <label for="imagen">Imagen de referencia</label>
+            <input type="file" id="imagen" name="imagen" accept="image/*">
+          </div>
+          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Guardar evento</button>
+          <button type="button" class="logout-btn" id="logoutAdmin"><i class="fas fa-sign-out-alt"></i> Cerrar panel</button>
         </div>
-        <div class="form-group">
-          <label for="fecha">Fecha</label>
-          <input type="date" id="fecha" name="fecha" required>
-        </div>
-        <div class="form-group">
-          <label for="horario">Horario (ej. 10:00 - 12:00)</label>
-          <input type="text" id="horario" name="horario" required>
-        </div>
-        <div class="form-group">
-          <label for="info">Información extra</label>
-          <textarea id="info" name="info" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="imagen">Imagen de referencia</label>
-          <input type="file" id="imagen" name="imagen" accept="image/*">
-        </div>
-        <button type="submit" class="btn-submit">Guardar evento</button>
-        <button type="button" class="logout-btn" id="logoutAdmin">Cerrar panel</button>
       </form>
 
-      <!-- Lista de eventos para administrar -->
       <div class="admin-event-list" id="adminEventList">
-        <h3 style="font-family: 'Bebas Neue', sans-serif; color: #c8102e; letter-spacing: 1px;">Eventos existentes</h3>
+        <h3><i class="fas fa-list"></i> Eventos existentes</h3>
         <div id="adminEventsContainer">Cargando...</div>
       </div>
     </div>
 
-    <!-- Lista de eventos públicos -->
-    <h2 class="section-title">📅 Eventos programados</h2>
+    <!-- Vista pública de eventos -->
+    <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Eventos programados</h2>
     <div class="events-grid" id="eventsContainer">
       <p class="no-events">Cargando eventos...</p>
     </div>
   </div>
 
   <script>
-    const ADMIN_PASSWORD = 'admin123'; // Cambia esta contraseña al valor que desees
+    const ADMIN_PASSWORD = 'admin123'; // Cambia esta contraseña
 
-    // Referencias DOM
     const adminToggle = document.getElementById('adminToggle');
     const adminPanel = document.getElementById('adminPanel');
     const logoutBtn = document.getElementById('logoutAdmin');
@@ -384,19 +448,18 @@
 
     let isAdmin = false;
 
-    // Mostrar/ocultar panel de administración
     adminToggle.addEventListener('click', () => {
       if (isAdmin) {
         isAdmin = false;
         adminPanel.classList.remove('active');
-        adminToggle.textContent = '🔐 Administrar';
+        adminToggle.innerHTML = '<i class="fas fa-lock"></i> Administrar';
       } else {
         const password = prompt('Ingrese la contraseña de administrador:');
         if (password === ADMIN_PASSWORD) {
           isAdmin = true;
           adminPanel.classList.add('active');
-          adminToggle.textContent = '🔓 Cerrar sesión';
-          loadAdminEvents(); // Cargar lista de eventos en el panel
+          adminToggle.innerHTML = '<i class="fas fa-lock-open"></i> Cerrar sesión';
+          loadAdminEvents();
         } else if (password !== null) {
           alert('Contraseña incorrecta');
         }
@@ -406,57 +469,48 @@
     logoutBtn.addEventListener('click', () => {
       isAdmin = false;
       adminPanel.classList.remove('active');
-      adminToggle.textContent = '🔐 Administrar';
+      adminToggle.innerHTML = '<i class="fas fa-lock"></i> Administrar';
     });
 
-    // Función para cargar eventos públicos (vista principal)
     async function loadEvents() {
       try {
         const response = await fetch('/api/events');
         const events = await response.json();
-
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const filtered = events.filter(ev => {
-          const evDate = new Date(ev.fecha + 'T00:00:00');
-          return evDate >= today;
-        });
-
+        const filtered = events.filter(ev => new Date(ev.fecha + 'T00:00:00') >= today);
         filtered.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
         renderEvents(filtered);
       } catch (error) {
-        console.error('Error cargando eventos:', error);
-        eventsContainer.innerHTML = '<p class="no-events">Error al cargar eventos. Intente recargar.</p>';
+        eventsContainer.innerHTML = '<p class="no-events">Error al cargar eventos.</p>';
       }
     }
 
     function renderEvents(events) {
       if (events.length === 0) {
-        eventsContainer.innerHTML = '<p class="no-events">No hay eventos programados próximamente.</p>';
+        eventsContainer.innerHTML = '<p class="no-events"><i class="far fa-calendar-times"></i> No hay eventos programados próximamente.</p>';
         return;
       }
-
       const todayStr = new Date().toISOString().split('T')[0];
       let html = '';
       events.forEach(ev => {
         const isToday = ev.fecha === todayStr;
-        const statusClass = isToday ? 'status-today' : 'status-future';
-        const statusText = isToday ? 'HOY' : 'PRÓXIMAMENTE';
-
         html += `
           <div class="event-card">
             ${ ev.imagen 
-              ? `<img src="${ev.imagen}" alt="${ev.titulo}" class="event-image" onerror="this.parentElement.innerHTML='<div class=\\'event-image-placeholder\\'>🖼️</div>';">` 
-              : '<div class="event-image-placeholder">🖼️</div>' 
+              ? `<img src="${ev.imagen}" alt="${ev.titulo}" class="event-image" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'event-image-placeholder\\'><i class=\\'far fa-image\\'></i></div>';">` 
+              : '<div class="event-image-placeholder"><i class="far fa-image"></i></div>' 
             }
             <div class="event-info">
               <h3 class="event-title">${ev.titulo}</h3>
               <div class="event-meta">
-                <div class="event-date">📅 ${formatDate(ev.fecha)}</div>
-                <div class="event-time">🕒 ${ev.horario}</div>
+                <span><i class="far fa-calendar-alt"></i> ${formatDate(ev.fecha)}</span>
+                <span><i class="far fa-clock"></i> ${ev.horario}</span>
               </div>
               ${ ev.info ? `<p class="event-extra">${ev.info}</p>` : '' }
-              <span class="event-status ${statusClass}">${statusText}</span>
+              <span class="event-status ${isToday ? 'status-today' : 'status-future'}">
+                ${isToday ? 'Hoy' : 'Próximamente'}
+              </span>
             </div>
           </div>
         `;
@@ -469,14 +523,13 @@
       return new Date(dateStr + 'T00:00:00').toLocaleDateString('es-PE', options);
     }
 
-    // Cargar lista de eventos en el panel admin
     async function loadAdminEvents() {
       try {
         const response = await fetch('/api/events');
         const events = await response.json();
         renderAdminEvents(events);
       } catch (error) {
-        adminEventsContainer.innerHTML = '<p style="color:#c8102e;">Error al cargar eventos.</p>';
+        adminEventsContainer.innerHTML = '<p style="color:red;">Error al cargar eventos.</p>';
       }
     }
 
@@ -485,79 +538,51 @@
         adminEventsContainer.innerHTML = '<p style="color:#888;">No hay eventos creados aún.</p>';
         return;
       }
-
       let html = '';
       events.forEach(ev => {
         html += `
           <div class="admin-event-item">
             <span>${ev.titulo} - ${ev.fecha} (${ev.horario})</span>
-            <button class="btn-delete" onclick="deleteEvent('${ev.id}')">🗑️ Eliminar</button>
+            <button class="btn-delete" onclick="deleteEvent('${ev.id}')"><i class="fas fa-trash-alt"></i> Eliminar</button>
           </div>
         `;
       });
       adminEventsContainer.innerHTML = html;
     }
 
-    // Función para eliminar un evento desde el panel admin
     async function deleteEvent(id) {
-      if (!confirm('¿Estás seguro de que deseas eliminar este evento? Esta acción no se puede deshacer.')) {
-        return;
-      }
-
+      if (!confirm('¿Estás seguro de eliminar este evento?')) return;
       try {
-        const response = await fetch(`/api/events/${id}`, {
-          method: 'DELETE'
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Error al eliminar');
-        }
-
-        alert('Evento eliminado correctamente');
-        loadAdminEvents();  // Refrescar lista del panel admin
-        loadEvents();       // Refrescar vista pública
+        const response = await fetch(`/api/events/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Error al eliminar');
+        alert('Evento eliminado');
+        loadAdminEvents();
+        loadEvents();
       } catch (error) {
-        console.error('Error:', error);
         alert('Error: ' + error.message);
       }
     }
 
-    // Enviar formulario para crear evento
     eventForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const formData = new FormData(eventForm);
       if (!formData.get('titulo') || !formData.get('fecha') || !formData.get('horario')) {
-        alert('Por favor complete los campos obligatorios: título, fecha y horario.');
+        alert('Complete los campos obligatorios.');
         return;
       }
-
       try {
-        const response = await fetch('/api/events', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Error al crear evento');
-        }
-
+        const response = await fetch('/api/events', { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Error al crear evento');
         alert('Evento creado exitosamente');
         eventForm.reset();
-        loadAdminEvents();  // Refrescar lista del panel admin
-        loadEvents();       // Refrescar vista pública
+        loadAdminEvents();
+        loadEvents();
       } catch (error) {
-        console.error('Error:', error);
         alert('Error: ' + error.message);
       }
     });
 
-    // Cargar eventos al iniciar
     loadEvents();
-
-    // Recargar automáticamente cada 30 segundos para reflejar cambios de otros usuarios
     setInterval(loadEvents, 30000);
   </script>
 </body>
